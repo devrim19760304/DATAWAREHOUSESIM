@@ -16,6 +16,81 @@
         </ul>
     </div>
     <h1> Sales Page</h1>
+    <button onclick="getSales()">Get Sales</button>
+    <div id="table-division">
+        <table>
+            <thead>
+                <tr>
+                    <th>Id </th>
+                    <th>Customer Name</th>
+                    <th>Product Name</th>
+                    <th>Product Price</th>
+                    <th>Product Amount</th>
+                    <th>Total Payment</th>
+                    <th>Product Category</th>
+                    <th>Customer Gender</th>
+                    <th>Customer City</th>
+                    <th>Customer State</th>
+                    <th>Customer Country</th>
+
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!--dynamic-->
+            </tbody>
+        </table>
+    </div>
+
+
+    <script>
+        async function getSales() {
+            let row=""
+
+            const url="http://localhost:3000/sales/getsales"
+            try {
+                const response=await fetch(url);
+                const data=await response.json()
+                console.log(data.datawareHouse[0].id)
+                data.datawareHouse.forEach((transaction)=>{console.log(transaction.id)
+                    row+=`
+                    <tr>
+                        <td> ${transaction.id}  </td>
+                        <td> ${transaction.customerName}  </td>
+                        <td> ${transaction.productName}  </td>
+                        <td> ${transaction.productPrice}  </td>
+                        <td> ${transaction.productAmount}  </td>
+                        <td> ${transaction.totalPayment}  </td>
+                        <td> ${transaction.productCategory}  </td>
+                        <td> ${transaction.customerGender}  </td>
+                        <td> ${transaction.customerCity}  </td>
+                        <td> ${transaction.customerState}  </td>
+                        <td> ${transaction.customerCountry}  </td>
+
+
+
+
+
+                        </tr>
+                    
+                    
+                    
+                    
+                    
+                    `
+
+
+
+
+                }
+                
+            )
+            document.getElementById("table-body").innerHTML=row;
+            
+            }catch(error) {
+                console.error("error",error)
+            }
+        }
+    </script>
     
 </body>
 </html>

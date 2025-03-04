@@ -28,15 +28,35 @@ router.get("/getsales",async(req,res)=> {
         const customerNumber=customers.length;
         //transactions 
         for (var i=0;i<numberTransactions;i++) {
+            let purchaseNumber=Math.floor(Math.random()*10)+1
 
             let randomCustomer=customers[Math.floor(Math.random()*customerNumber)];
-            let randomProduct=products[Math.floor(Math.random())*productNumber]
-            console.log(`transaction no: ${i}---${randomCustomer.name.first}::::${randomProduct.title}`)
+            let randomProduct=products[Math.floor(Math.random()*productNumber)]
+            //console.log(`transaction no: ${i}---${randomCustomer.name.first}::::${randomProduct.title}`)
+            let randomTransaction= {
+                id:i,
+                customerName:`${randomCustomer.name.first} ${randomCustomer.name.last}`,
+                productName:randomProduct.title,
+                productPrice:randomProduct.price,
+                productAmount:purchaseNumber, //let us create it dynamically 
+                totalPayment:randomProduct.price*purchaseNumber,
+                productCategory:randomProduct.category,
+                customerGender:randomCustomer.gender,
+                customerCity:randomCustomer.location.city,
+                customerState:randomCustomer.location.state,
+                customerCountry:randomCustomer.location.country
+            }
+            //push to datawarehouse
+            datawareHouse.push(randomTransaction)
+            
         }
+        const testObject=datawareHouse[5];
+        console.log(testObject);
 
         res.status(200).json({
             statusCode:"200",
-            message:"Success"
+            message:"Success",
+            datawareHouse
         })
     }catch(error) {
         res.status(500).json({
