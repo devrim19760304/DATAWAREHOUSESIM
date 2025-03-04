@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles/common.css">
+</head>
+<body>
+    <div id="navbar-division">
+        <ul>
+            <li><a href="/">HOME</a></li>
+            <li><a href="/customers">CUSTOMERS</a></li>
+            <li><a href="/products">PRODUCTS</a></li>
+            <li><a href="/sales">SALES</a></li>
+        </ul>
+    </div>
+    <h1> Customers Page</h1>
+    <button type="button" onclick="getCustomers()">Get Customers</button>
+    <div id="customers-table-section">
+        <table id="customer-table">
+            <thead>
+                <tr>
+                    <th> Id </th>
+                    <th> Name </th>
+                    <th> Gender</th>
+
+                    <th> City </th>
+                    <th> State </th>
+                    <th> Country </th>
+                </tr>
+            </thead>
+            <tbody id="customer-table-body">
+                <!--dynamic data -->
+            </tbody>
+            
+        </table>
+    </div>
+
+    <script>
+        
+
+            const customerTableBody=document.getElementById("customer-table-body");
+        
+        
+
+        async function getCustomers() {
+            let row="";
+            const url="http://localhost:3000/customers/getcustomers"
+            try {
+                const response=await fetch(url);
+                if (!response.ok) {
+                    throw new Error("fetch failed")
+                }
+                const data=await response.json()
+                //console.log(data.results);
+                const customerData=data.results;
+                let id=0;
+
+                //foreach for customerData
+                //console.log(customer.name.first)
+                customerData.forEach((customer)=>{
+                    row+=`
+                    <tr>
+                        <td> ${id++} </td>
+                        <td> ${customer.name.first} ${customer.name.last} </td>
+                        <td> ${customer.gender}</td>
+                        <td> ${customer.location.city}</td>
+                        <td> ${customer.location.state}</td>
+                        <td> ${customer.location.country}</td>
+                        </tr>                  
+                    
+                    
+                    `
+                })
+                //customerTableBody.innerHTML="";
+
+                customerTableBody.innerHTML=row;
+
+
+
+            } catch(error) {
+                console.error("error",error)
+            }
+        }
+
+
+
+
+        
+        
+        
+    </script>
+    
+</body>
+</html>

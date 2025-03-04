@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="./styles/common.css">
+</head>
+<body>
+    <div id="navbar-division">
+        <ul>
+            <li><a href="/">HOME</a></li>
+            <li><a href="/customers">CUSTOMERS</a></li>
+            <li><a href="/products">PRODUCTS</a></li>
+            <li><a href="/sales">SALES</a></li>
+        </ul>
+    </div>
+    <h1> Products Page</h1>
+    <button type="button" onclick="getProducts()">Get Products</button>
+    <div id="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                </tr>
+            </thead>
+            <tbody id="product-table-body">
+                <!--dynamic data-->
+
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const tableBody=document.getElementById("product-table-body")
+        const baseUrl=window.location.origin;
+        console.log("base url is ",baseUrl)
+        
+
+        async function getProducts() {
+            let row="";
+            const url=`${baseUrl}/products/getproducts`;
+            try {
+                const response=await fetch(url);
+                if (!response.ok) {
+                    throw new Error("fetch failed ")
+                }
+                const data=await response.json()
+                console.log(data);
+                //we will add dynamic table here
+                data.forEach((product)=> {
+
+                    row+= `
+
+                    <tr>
+                        <td> ${product.id} </td>
+                        <td> ${product.title} </td>
+                        <td> ${product.price} </td>
+                        <td> ${product.description} </td>
+                        <td> ${product.category} </td>
+
+                        </tr>                  
+                    
+                    
+                    `
+                })
+                tableBody.innerHTML=row;
+
+            } catch(error) {
+                console.error("error",error)
+            }
+        }
+
+    </script>
+
+
+    
+</body>
+</html>
