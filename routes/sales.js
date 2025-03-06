@@ -8,15 +8,26 @@ router.get("/",(req,res)=> {
     res.sendFile(path.join(__dirname,"../views/sales.html"))
 })
 
+//create an empty datawareHouse
+
+let datawareHouse=[] //this will be populated by transactions 
 router.get("/getsales",async(req,res)=> {
+    datawareHouse=[];
+    //datawareHouse.length=0;
+    //Array.Clear(datawareHouse,0,499)
 
     const customersUrl="http://localhost:3000/customers/getcustomers";
     const productsUrl="http://localhost:3000/products/getproducts";
-    let datawareHouse=[] //this will be populated by transactions 
+    
 
     try {
-        const customersData=await axios.get(customersUrl);
-        const productsData=await axios.get(productsUrl);
+        //const customersData=await axios.get(customersUrl);
+        //const productsData=await axios.get(productsUrl);
+        const [customersData,productsData]=await Promise.all(
+            [axios.get(customersUrl),
+        axios.get(productsUrl)]
+        )
+
         const customers=await customersData.data.results;
         const products=await productsData.data;
         //to see if we could grab correct data fields
@@ -67,6 +78,23 @@ router.get("/getsales",async(req,res)=> {
     }
     
 
+})
+
+router.get("/saveasjson",async (req,res)=> {
+
+    //check if customerOBject is populated or not 
+    console.log(datawareHouse);
+    if (datawareHouse.length==0) {
+        return res.status(200).json({
+            message:"DatawareHouse is empty"
+        })
+    }
+     res.status(200).json({
+        statusCode:"200",
+        message:"file is saved",
+        datawareHouse
+
+    })
 })
 
 
